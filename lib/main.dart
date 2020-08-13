@@ -1,7 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_calculator/components/custom_fab_button.dart';
+import 'package:flutter_calculator/enums/calculate_operant_enums.dart';
+import 'package:flutter_calculator/utilites/strings.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+
+import 'utilites/colors.dart';
+import 'utilites/tools.dart';
 
 void main() {
   runApp(MyApp());
@@ -17,27 +22,39 @@ class MyApp extends StatelessWidget {
   }
 }
 
-const Color BUTTON_BLUE_BD = Color(0xFFE7F3FE);
-const Color BUTTON_GRAY_BD = Colors.white60;
-const Color BUTTON_RED_BD = Color(0xFFFFE7EB);
-const Color BUTTON_ORANGE_BD = Color(0xFFFFF7E9);
-const Color BUTTON_GREEN_BD = Color(0xFFE7FBEB);
-
-const Color BUTTON_WHITE_SPLASH = Colors.white;
-const Color BUTTON_BLUE_SPLASH = Colors.lightBlue;
-const Color BUTTON_RED_SPLASH = Colors.red;
-const Color BUTTON_ORANGE_SPLASH = Color(0xFFf7ca7e);
-const Color BUTTON_GREEN_SPLASH = Colors.greenAccent;
-
 class HomeScreen extends StatefulWidget {
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  tiklandi() {
+  String firstNumber = "";
+  String secondNumber = "";
+  CalculateOperant calculateOperant;
+  bool isTextEmpty = true;
+
+  tiklandi(String entryNumber,
+      {isCalcOperant = false, CalculateOperant clickOperant}) {
     setState(() {
-      print("tiklandi");
+      if (!isCalcOperant) {
+        if (!isTextEmpty) {
+          firstNumber = "";
+          isTextEmpty = true;
+        }
+        firstNumber = "$firstNumber$entryNumber";
+      } else {
+        if (clickOperant == CalculateOperant.EQUALS) {
+          firstNumber = calculateOperant
+              .getCalculate(firstNumber, secondNumber)
+              .toString();
+          secondNumber = "";
+          isTextEmpty = false;
+        } else {
+          calculateOperant = clickOperant;
+          secondNumber = firstNumber;
+          firstNumber = "";
+        }
+      }
     });
   }
 
@@ -48,7 +65,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            TopScreenText(),
+            TopScreenText(firstNumber, secondNumber),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -58,9 +75,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     buttonIcon: MaterialCommunityIcons.plus,
                     isIconAdded: true,
                     buttonOnClick: () {
-                      setState(() {
-                        tiklandi();
-                      });
+                      tiklandi(TEXT_PLUS,
+                          isCalcOperant: true,
+                          clickOperant: CalculateOperant.PLUS);
                     }),
                 CustomFabButtons(
                     buttonBdColor: BUTTON_BLUE_BD,
@@ -68,9 +85,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     buttonIcon: MaterialCommunityIcons.minus,
                     isIconAdded: true,
                     buttonOnClick: () {
-                      setState(() {
-                        tiklandi();
-                      });
+                      tiklandi(TEXT_SUM,
+                          isCalcOperant: true,
+                          clickOperant: CalculateOperant.SUM);
                     }),
                 CustomFabButtons(
                     buttonBdColor: BUTTON_BLUE_BD,
@@ -78,9 +95,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     buttonIcon: MaterialCommunityIcons.multiplication,
                     isIconAdded: true,
                     buttonOnClick: () {
-                      setState(() {
-                        tiklandi();
-                      });
+                      tiklandi(TEXT_MULTIP, isCalcOperant: true);
                     }),
                 CustomFabButtons(
                     buttonBdColor: BUTTON_BLUE_BD,
@@ -88,10 +103,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     buttonIcon: MaterialCommunityIcons.division,
                     isIconAdded: true,
                     buttonOnClick: () {
-                      setState(() {
-                        tiklandi();
-                      });
-                    })
+                      tiklandi(TEXT_DIV,
+                          isCalcOperant: true,
+                          clickOperant: CalculateOperant.DIVIDE);
+                    }),
               ],
             ),
             Row(
@@ -100,32 +115,23 @@ class _HomeScreenState extends State<HomeScreen> {
                 CustomFabButtons(
                     buttonBdColor: BUTTON_GRAY_BD,
                     buttonSplashColor: BUTTON_WHITE_SPLASH,
-                    buttonText: '7',
-                    isIconAdded: false,
+                    buttonText: TEXT_SEVEN,
                     buttonOnClick: () {
-                      setState(() {
-                        tiklandi();
-                      });
+                      tiklandi(TEXT_SEVEN);
                     }),
                 CustomFabButtons(
                     buttonBdColor: BUTTON_GRAY_BD,
                     buttonSplashColor: BUTTON_WHITE_SPLASH,
-                    buttonText: '8',
-                    isIconAdded: false,
+                    buttonText: TEXT_EIGHT,
                     buttonOnClick: () {
-                      setState(() {
-                        tiklandi();
-                      });
+                      tiklandi(TEXT_EIGHT);
                     }),
                 CustomFabButtons(
                     buttonBdColor: BUTTON_GRAY_BD,
                     buttonSplashColor: BUTTON_WHITE_SPLASH,
-                    buttonText: '9',
-                    isIconAdded: false,
+                    buttonText: TEXT_NINE,
                     buttonOnClick: () {
-                      setState(() {
-                        tiklandi();
-                      });
+                      tiklandi(TEXT_NINE);
                     }),
                 CustomFabButtons(
                     buttonBdColor: BUTTON_RED_BD,
@@ -133,10 +139,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     buttonIcon: MaterialCommunityIcons.exponent,
                     isIconAdded: true,
                     buttonOnClick: () {
-                      setState(() {
-                        tiklandi();
-                      });
-                    })
+                      tiklandi(TEXT_EXPONENT,
+                          isCalcOperant: true,
+                          clickOperant: CalculateOperant.EXPONENT);
+                    }),
               ],
             ),
             Row(
@@ -145,32 +151,23 @@ class _HomeScreenState extends State<HomeScreen> {
                 CustomFabButtons(
                     buttonBdColor: BUTTON_GRAY_BD,
                     buttonSplashColor: BUTTON_WHITE_SPLASH,
-                    buttonText: '4',
-                    isIconAdded: false,
+                    buttonText: TEXT_FOUR,
                     buttonOnClick: () {
-                      setState(() {
-                        tiklandi();
-                      });
+                      tiklandi(TEXT_FOUR);
                     }),
                 CustomFabButtons(
                     buttonBdColor: BUTTON_GRAY_BD,
                     buttonSplashColor: BUTTON_WHITE_SPLASH,
-                    buttonText: '5',
-                    isIconAdded: false,
+                    buttonText: TEXT_FIVE,
                     buttonOnClick: () {
-                      setState(() {
-                        tiklandi();
-                      });
+                      tiklandi(TEXT_FIVE);
                     }),
                 CustomFabButtons(
                     buttonBdColor: BUTTON_GRAY_BD,
                     buttonSplashColor: BUTTON_WHITE_SPLASH,
-                    buttonText: '6',
-                    isIconAdded: false,
+                    buttonText: TEXT_SIX,
                     buttonOnClick: () {
-                      setState(() {
-                        tiklandi();
-                      });
+                      tiklandi(TEXT_SIX);
                     }),
                 CustomFabButtons(
                     buttonBdColor: BUTTON_RED_BD,
@@ -178,10 +175,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     buttonIcon: MaterialCommunityIcons.percent,
                     isIconAdded: true,
                     buttonOnClick: () {
-                      setState(() {
-                        tiklandi();
-                      });
-                    })
+                      tiklandi(TEXT_PERCENT,
+                          isCalcOperant: true,
+                          clickOperant: CalculateOperant.PERCENT);
+                    }),
               ],
             ),
             Row(
@@ -190,32 +187,23 @@ class _HomeScreenState extends State<HomeScreen> {
                 CustomFabButtons(
                     buttonBdColor: BUTTON_GRAY_BD,
                     buttonSplashColor: BUTTON_WHITE_SPLASH,
-                    buttonText: '1',
-                    isIconAdded: false,
+                    buttonText: TEXT_ONE,
                     buttonOnClick: () {
-                      setState(() {
-                        tiklandi();
-                      });
+                      tiklandi(TEXT_ONE);
                     }),
                 CustomFabButtons(
                     buttonBdColor: BUTTON_GRAY_BD,
                     buttonSplashColor: BUTTON_WHITE_SPLASH,
-                    buttonText: '2',
-                    isIconAdded: false,
+                    buttonText: TEXT_TWO,
                     buttonOnClick: () {
-                      setState(() {
-                        tiklandi();
-                      });
+                      tiklandi(TEXT_TWO);
                     }),
                 CustomFabButtons(
                     buttonBdColor: BUTTON_GRAY_BD,
                     buttonSplashColor: BUTTON_WHITE_SPLASH,
-                    buttonText: '3',
-                    isIconAdded: false,
+                    buttonText: TEXT_THREE,
                     buttonOnClick: () {
-                      setState(() {
-                        tiklandi();
-                      });
+                      tiklandi(TEXT_THREE);
                     }),
                 CustomFabButtons(
                     buttonBdColor: BUTTON_RED_BD,
@@ -223,10 +211,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     buttonIcon: MaterialCommunityIcons.delete,
                     isIconAdded: true,
                     buttonOnClick: () {
-                      setState(() {
-                        tiklandi();
-                      });
-                    })
+                      tiklandi(TEXT_DELETE_ALL,
+                          isCalcOperant: true,
+                          clickOperant: CalculateOperant.DELETE_ALL);
+                    }),
               ],
             ),
             Row(
@@ -235,22 +223,16 @@ class _HomeScreenState extends State<HomeScreen> {
                 CustomFabButtons(
                     buttonBdColor: BUTTON_GRAY_BD,
                     buttonSplashColor: BUTTON_WHITE_SPLASH,
-                    buttonText: '0',
-                    isIconAdded: false,
+                    buttonText: TEXT_ZERO,
                     buttonOnClick: () {
-                      setState(() {
-                        tiklandi();
-                      });
+                      tiklandi(TEXT_ZERO);
                     }),
                 CustomFabButtons(
                     buttonBdColor: BUTTON_GRAY_BD,
                     buttonSplashColor: BUTTON_WHITE_SPLASH,
-                    buttonText: '.',
-                    isIconAdded: false,
+                    buttonText: TEXT_DOT,
                     buttonOnClick: () {
-                      setState(() {
-                        tiklandi();
-                      });
+                      tiklandi(TEXT_DOT);
                     }),
                 CustomFabButtons(
                     buttonBdColor: BUTTON_ORANGE_BD,
@@ -258,20 +240,20 @@ class _HomeScreenState extends State<HomeScreen> {
                     buttonIcon: MaterialCommunityIcons.backspace,
                     isIconAdded: true,
                     buttonOnClick: () {
-                      setState(() {
-                        tiklandi();
-                      });
+                      tiklandi(TEXT_REMOVE_LAST,
+                          isCalcOperant: true,
+                          clickOperant: CalculateOperant.REMOVE_LAST);
                     }),
                 CustomFabButtons(
-                    buttonBdColor: BUTTON_GREEN_BD,
-                    buttonSplashColor: BUTTON_GREEN_SPLASH,
-                    buttonText: '=',
-                    isIconAdded: false,
-                    buttonOnClick: () {
-                      setState(() {
-                        tiklandi();
-                      });
-                    })
+                  buttonBdColor: BUTTON_GREEN_BD,
+                  buttonSplashColor: BUTTON_GREEN_SPLASH,
+                  buttonText: TEXT_EQUAL,
+                  buttonOnClick: () {
+                    tiklandi(TEXT_DELETE_ALL,
+                        isCalcOperant: true,
+                        clickOperant: CalculateOperant.EQUALS);
+                  },
+                )
               ],
             )
           ],
@@ -284,6 +266,10 @@ class _HomeScreenState extends State<HomeScreen> {
 class TopScreenText extends StatefulWidget {
   @override
   _TopScreenTextState createState() => _TopScreenTextState();
+
+  TopScreenText(this.firstNumber, this.secondNumber);
+
+  String firstNumber, secondNumber;
 }
 
 class _TopScreenTextState extends State<TopScreenText> {
@@ -295,14 +281,14 @@ class _TopScreenTextState extends State<TopScreenText> {
           Container(
             alignment: Alignment.centerRight,
             margin: EdgeInsets.only(top: 24, right: 24),
-            child: Text('52 x 23',
-                style: TextStyle(fontSize: 24, color: Colors.black38)),
+            child: Text(widget.secondNumber,
+                style: TextStyle(fontSize: 24, color: Colors.black45)),
           ),
           Container(
             alignment: Alignment.centerRight,
             margin: EdgeInsets.only(top: 24, right: 24),
-            child: Text('425',
-                style: TextStyle(fontSize: 72, color: Colors.black38)),
+            child: Text(widget.firstNumber,
+                style: TextStyle(fontSize: 72, color: Colors.black54)),
           ),
         ],
       ),
