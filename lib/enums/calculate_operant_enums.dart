@@ -7,5 +7,6 @@ enum CalculateOperant {
   PERCENT,
   DELETE_ALL,
   REMOVE_LAST,
-  EQUALS
+  EQUALS,
+  DOT
 }

@@ -32,6 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
   String firstNumber = "";
   String secondNumber = "";
   CalculateOperant calculateOperant;
+  bool isDotUser = false;
 
   clicked(String entryNumber,
       {isCalcOperant = false, CalculateOperant clickOperant}) {
@@ -42,8 +43,12 @@ class _HomeScreenState extends State<HomeScreen> {
         if (clickOperant == CalculateOperant.DELETE_ALL) {
           firstNumber = "";
           secondNumber = "";
+          isDotUser = false;
         } else if (clickOperant == CalculateOperant.REMOVE_LAST) {
-          if (firstNumber.isNotEmpty)
+          if (firstNumber[firstNumber.length - 1] == TEXT_DOT) {
+            firstNumber = firstNumber.substring(0, firstNumber.length - 1);
+            isDotUser = false;
+          } else if (firstNumber.isNotEmpty)
             firstNumber = firstNumber.substring(0, firstNumber.length - 1);
         } else if (clickOperant == CalculateOperant.EQUALS) {
           firstNumber =
@@ -54,9 +59,20 @@ class _HomeScreenState extends State<HomeScreen> {
             firstNumber = "-";
           } else {
             savedInputValue(clickOperant);
+            isDotUser = false;
+          }
+        } else if (clickOperant == CalculateOperant.DOT) {
+          if (!isDotUser) {
+            if (firstNumber.isEmpty)
+              firstNumber = "";
+            else {
+              firstNumber = firstNumber + ".";
+              isDotUser = true;
+            }
           }
         } else {
           savedInputValue(clickOperant);
+          isDotUser = false;
         }
       }
     });
@@ -244,7 +260,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     buttonSplashColor: BUTTON_WHITE_SPLASH,
                     buttonText: TEXT_DOT,
                     buttonOnClick: () {
-                      clicked(TEXT_DOT);
+                      clicked(TEXT_DOT,
+                          isCalcOperant: true,
+                          clickOperant: CalculateOperant.DOT);
                     }),
                 CustomFabButtons(
                     buttonBdColor: BUTTON_ORANGE_BD,

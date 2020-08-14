@@ -32,6 +32,8 @@ extension GetCalculate on CalculateOperant {
         break;
       case CalculateOperant.EQUALS:
         break;
+      case CalculateOperant.DOT:
+        break;
     }
     return resultSplit(result);
   }
