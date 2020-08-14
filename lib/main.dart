@@ -49,6 +49,16 @@ class _HomeScreenState extends State<HomeScreen> {
               .toString();
           secondNumber = "";
           isTextEmpty = false;
+        } else if (clickOperant == CalculateOperant.DELETE_ALL) {
+          firstNumber = "";
+          secondNumber = "";
+        } else if (clickOperant == CalculateOperant.REMOVE_LAST) {
+          if (firstNumber.isNotEmpty)
+            firstNumber = firstNumber.substring(0, firstNumber.length - 1);
+        } else if (clickOperant == CalculateOperant.SUM) {
+          if (!firstNumber.isNotEmpty) {
+            firstNumber = "$firstNumber$entryNumber";
+          }
         } else {
           calculateOperant = clickOperant;
           secondNumber = firstNumber;
@@ -95,7 +105,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     buttonIcon: MaterialCommunityIcons.multiplication,
                     isIconAdded: true,
                     buttonOnClick: () {
-                      tiklandi(TEXT_MULTIP, isCalcOperant: true);
+                      tiklandi(TEXT_MULTIP,
+                          isCalcOperant: true,
+                          clickOperant: CalculateOperant.MULTIP);
                     }),
                 CustomFabButtons(
                     buttonBdColor: BUTTON_BLUE_BD,

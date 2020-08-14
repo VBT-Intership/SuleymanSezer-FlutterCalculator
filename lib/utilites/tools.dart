@@ -33,6 +33,6 @@ extension GetCalculate on CalculateOperant {
       case CalculateOperant.EQUALS:
         break;
     }
-    return double.parse(result.toStringAsFixed(8));
+    return double.parse(result.toStringAsFixed(6));
   }
 }
