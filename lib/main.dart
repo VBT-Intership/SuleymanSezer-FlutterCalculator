@@ -32,42 +32,40 @@ class _HomeScreenState extends State<HomeScreen> {
   String firstNumber = "";
   String secondNumber = "";
   CalculateOperant calculateOperant;
-  bool isTextEmpty = true;
 
   clicked(String entryNumber,
       {isCalcOperant = false, CalculateOperant clickOperant}) {
     setState(() {
       if (!isCalcOperant) {
-        if (!isTextEmpty) {
-          firstNumber = "";
-          isTextEmpty = true;
-        }
         firstNumber = "$firstNumber$entryNumber";
       } else {
-        if (clickOperant == CalculateOperant.EQUALS) {
-          if (firstNumber.isNotEmpty && secondNumber.isNotEmpty) {
-            firstNumber =
-                calculateOperant.getCalculate(firstNumber, secondNumber);
-            secondNumber = "";
-            isTextEmpty = false;
-          }
-        } else if (clickOperant == CalculateOperant.DELETE_ALL) {
+        if (clickOperant == CalculateOperant.DELETE_ALL) {
           firstNumber = "";
           secondNumber = "";
         } else if (clickOperant == CalculateOperant.REMOVE_LAST) {
           if (firstNumber.isNotEmpty)
             firstNumber = firstNumber.substring(0, firstNumber.length - 1);
+        } else if (clickOperant == CalculateOperant.EQUALS) {
+          firstNumber =
+              calculateOperant.getCalculate(firstNumber, secondNumber);
+          secondNumber = "";
         } else if (clickOperant == CalculateOperant.SUM) {
-          if (!firstNumber.isNotEmpty) {
-            firstNumber = "$firstNumber$entryNumber";
+          if (firstNumber.isEmpty) {
+            firstNumber = "-";
+          } else {
+            savedInputValue(clickOperant);
           }
         } else {
-          calculateOperant = clickOperant;
-          secondNumber = firstNumber;
-          firstNumber = "";
+          savedInputValue(clickOperant);
         }
       }
     });
+  }
+
+  void savedInputValue(CalculateOperant clickOperant) {
+    secondNumber = firstNumber;
+    firstNumber = "";
+    calculateOperant = clickOperant;
   }
 
   @override
