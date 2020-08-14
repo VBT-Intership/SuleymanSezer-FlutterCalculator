@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_calculator/components/custom_fab_button.dart';
+import 'package:flutter_calculator/components/custom_text.dart';
 import 'package:flutter_calculator/enums/calculate_operant_enums.dart';
 import 'package:flutter_calculator/utilites/strings.dart';
 import 'package:flutter_icons/flutter_icons.dart';
@@ -33,7 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
   CalculateOperant calculateOperant;
   bool isTextEmpty = true;
 
-  tiklandi(String entryNumber,
+  clicked(String entryNumber,
       {isCalcOperant = false, CalculateOperant clickOperant}) {
     setState(() {
       if (!isCalcOperant) {
@@ -44,11 +45,12 @@ class _HomeScreenState extends State<HomeScreen> {
         firstNumber = "$firstNumber$entryNumber";
       } else {
         if (clickOperant == CalculateOperant.EQUALS) {
-          firstNumber = calculateOperant
-              .getCalculate(firstNumber, secondNumber)
-              .toString();
-          secondNumber = "";
-          isTextEmpty = false;
+          if (firstNumber.isNotEmpty && secondNumber.isNotEmpty) {
+            firstNumber =
+                calculateOperant.getCalculate(firstNumber, secondNumber);
+            secondNumber = "";
+            isTextEmpty = false;
+          }
         } else if (clickOperant == CalculateOperant.DELETE_ALL) {
           firstNumber = "";
           secondNumber = "";
@@ -85,7 +87,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     buttonIcon: MaterialCommunityIcons.plus,
                     isIconAdded: true,
                     buttonOnClick: () {
-                      tiklandi(TEXT_PLUS,
+                      clicked(TEXT_PLUS,
                           isCalcOperant: true,
                           clickOperant: CalculateOperant.PLUS);
                     }),
@@ -95,7 +97,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     buttonIcon: MaterialCommunityIcons.minus,
                     isIconAdded: true,
                     buttonOnClick: () {
-                      tiklandi(TEXT_SUM,
+                      clicked(TEXT_SUM,
                           isCalcOperant: true,
                           clickOperant: CalculateOperant.SUM);
                     }),
@@ -105,7 +107,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     buttonIcon: MaterialCommunityIcons.multiplication,
                     isIconAdded: true,
                     buttonOnClick: () {
-                      tiklandi(TEXT_MULTIP,
+                      clicked(TEXT_MULTIP,
                           isCalcOperant: true,
                           clickOperant: CalculateOperant.MULTIP);
                     }),
@@ -115,7 +117,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     buttonIcon: MaterialCommunityIcons.division,
                     isIconAdded: true,
                     buttonOnClick: () {
-                      tiklandi(TEXT_DIV,
+                      clicked(TEXT_DIV,
                           isCalcOperant: true,
                           clickOperant: CalculateOperant.DIVIDE);
                     }),
@@ -129,21 +131,21 @@ class _HomeScreenState extends State<HomeScreen> {
                     buttonSplashColor: BUTTON_WHITE_SPLASH,
                     buttonText: TEXT_SEVEN,
                     buttonOnClick: () {
-                      tiklandi(TEXT_SEVEN);
+                      clicked(TEXT_SEVEN);
                     }),
                 CustomFabButtons(
                     buttonBdColor: BUTTON_GRAY_BD,
                     buttonSplashColor: BUTTON_WHITE_SPLASH,
                     buttonText: TEXT_EIGHT,
                     buttonOnClick: () {
-                      tiklandi(TEXT_EIGHT);
+                      clicked(TEXT_EIGHT);
                     }),
                 CustomFabButtons(
                     buttonBdColor: BUTTON_GRAY_BD,
                     buttonSplashColor: BUTTON_WHITE_SPLASH,
                     buttonText: TEXT_NINE,
                     buttonOnClick: () {
-                      tiklandi(TEXT_NINE);
+                      clicked(TEXT_NINE);
                     }),
                 CustomFabButtons(
                     buttonBdColor: BUTTON_RED_BD,
@@ -151,7 +153,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     buttonIcon: MaterialCommunityIcons.exponent,
                     isIconAdded: true,
                     buttonOnClick: () {
-                      tiklandi(TEXT_EXPONENT,
+                      clicked(TEXT_EXPONENT,
                           isCalcOperant: true,
                           clickOperant: CalculateOperant.EXPONENT);
                     }),
@@ -165,21 +167,21 @@ class _HomeScreenState extends State<HomeScreen> {
                     buttonSplashColor: BUTTON_WHITE_SPLASH,
                     buttonText: TEXT_FOUR,
                     buttonOnClick: () {
-                      tiklandi(TEXT_FOUR);
+                      clicked(TEXT_FOUR);
                     }),
                 CustomFabButtons(
                     buttonBdColor: BUTTON_GRAY_BD,
                     buttonSplashColor: BUTTON_WHITE_SPLASH,
                     buttonText: TEXT_FIVE,
                     buttonOnClick: () {
-                      tiklandi(TEXT_FIVE);
+                      clicked(TEXT_FIVE);
                     }),
                 CustomFabButtons(
                     buttonBdColor: BUTTON_GRAY_BD,
                     buttonSplashColor: BUTTON_WHITE_SPLASH,
                     buttonText: TEXT_SIX,
                     buttonOnClick: () {
-                      tiklandi(TEXT_SIX);
+                      clicked(TEXT_SIX);
                     }),
                 CustomFabButtons(
                     buttonBdColor: BUTTON_RED_BD,
@@ -187,7 +189,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     buttonIcon: MaterialCommunityIcons.percent,
                     isIconAdded: true,
                     buttonOnClick: () {
-                      tiklandi(TEXT_PERCENT,
+                      clicked(TEXT_PERCENT,
                           isCalcOperant: true,
                           clickOperant: CalculateOperant.PERCENT);
                     }),
@@ -201,21 +203,21 @@ class _HomeScreenState extends State<HomeScreen> {
                     buttonSplashColor: BUTTON_WHITE_SPLASH,
                     buttonText: TEXT_ONE,
                     buttonOnClick: () {
-                      tiklandi(TEXT_ONE);
+                      clicked(TEXT_ONE);
                     }),
                 CustomFabButtons(
                     buttonBdColor: BUTTON_GRAY_BD,
                     buttonSplashColor: BUTTON_WHITE_SPLASH,
                     buttonText: TEXT_TWO,
                     buttonOnClick: () {
-                      tiklandi(TEXT_TWO);
+                      clicked(TEXT_TWO);
                     }),
                 CustomFabButtons(
                     buttonBdColor: BUTTON_GRAY_BD,
                     buttonSplashColor: BUTTON_WHITE_SPLASH,
                     buttonText: TEXT_THREE,
                     buttonOnClick: () {
-                      tiklandi(TEXT_THREE);
+                      clicked(TEXT_THREE);
                     }),
                 CustomFabButtons(
                     buttonBdColor: BUTTON_RED_BD,
@@ -223,7 +225,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     buttonIcon: MaterialCommunityIcons.delete,
                     isIconAdded: true,
                     buttonOnClick: () {
-                      tiklandi(TEXT_DELETE_ALL,
+                      clicked(TEXT_DELETE_ALL,
                           isCalcOperant: true,
                           clickOperant: CalculateOperant.DELETE_ALL);
                     }),
@@ -237,14 +239,14 @@ class _HomeScreenState extends State<HomeScreen> {
                     buttonSplashColor: BUTTON_WHITE_SPLASH,
                     buttonText: TEXT_ZERO,
                     buttonOnClick: () {
-                      tiklandi(TEXT_ZERO);
+                      clicked(TEXT_ZERO);
                     }),
                 CustomFabButtons(
                     buttonBdColor: BUTTON_GRAY_BD,
                     buttonSplashColor: BUTTON_WHITE_SPLASH,
                     buttonText: TEXT_DOT,
                     buttonOnClick: () {
-                      tiklandi(TEXT_DOT);
+                      clicked(TEXT_DOT);
                     }),
                 CustomFabButtons(
                     buttonBdColor: BUTTON_ORANGE_BD,
@@ -252,7 +254,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     buttonIcon: MaterialCommunityIcons.backspace,
                     isIconAdded: true,
                     buttonOnClick: () {
-                      tiklandi(TEXT_REMOVE_LAST,
+                      clicked(TEXT_REMOVE_LAST,
                           isCalcOperant: true,
                           clickOperant: CalculateOperant.REMOVE_LAST);
                     }),
@@ -261,7 +263,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   buttonSplashColor: BUTTON_GREEN_SPLASH,
                   buttonText: TEXT_EQUAL,
                   buttonOnClick: () {
-                    tiklandi(TEXT_DELETE_ALL,
+                    clicked(TEXT_DELETE_ALL,
                         isCalcOperant: true,
                         clickOperant: CalculateOperant.EQUALS);
                   },
@@ -288,20 +290,11 @@ class _TopScreenTextState extends State<TopScreenText> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      alignment: Alignment.centerRight,
       child: Column(
         children: [
-          Container(
-            alignment: Alignment.centerRight,
-            margin: EdgeInsets.only(top: 24, right: 24),
-            child: Text(widget.secondNumber,
-                style: TextStyle(fontSize: 24, color: Colors.black45)),
-          ),
-          Container(
-            alignment: Alignment.centerRight,
-            margin: EdgeInsets.only(top: 24, right: 24),
-            child: Text(widget.firstNumber,
-                style: TextStyle(fontSize: 72, color: Colors.black54)),
-          ),
+          CustomText(widget.secondNumber + "", Colors.black45, TEXT_SMALL_SIZE),
+          CustomText(widget.firstNumber + "", Colors.black54, TEXT_BIG_SIZE)
         ],
       ),
     );

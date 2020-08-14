@@ -3,7 +3,7 @@ import 'dart:math' as Math;
 import 'package:flutter_calculator/enums/calculate_operant_enums.dart';
 
 extension GetCalculate on CalculateOperant {
-  double getCalculate(String num1, String num2) {
+  String getCalculate(String num1, String num2) {
     double nm1 = double.parse(num1);
     double nm2 = double.parse(num2);
     double result;
@@ -33,6 +33,46 @@ extension GetCalculate on CalculateOperant {
       case CalculateOperant.EQUALS:
         break;
     }
-    return double.parse(result.toStringAsFixed(6));
+    return resultSplit(result);
   }
+}
+
+String resultSplit(double result) {
+  List<String> splited = result.toString().split('.');
+  String dotBefore = splited[0];
+  String dotAfter = splited[1];
+
+  String willReturn;
+
+  double isZero = double.parse(dotAfter);
+  if (isZero == 0)
+    willReturn = dotBefore;
+  else
+    willReturn = result.toStringAsFixed(6);
+
+  return deleteZero(willReturn);
+}
+
+String deleteZero(String value) {
+  if (value[value.length - 1] == "0") {
+    bool birOncekiSifirMi = true;
+    bool sifirdanFarkliMi = false;
+    int sifirinSonKonumu = value.length - 1;
+    int indis = value.length - 1;
+
+    while (!sifirdanFarkliMi) {
+      if (value[indis] == "0") {
+        if (birOncekiSifirMi) {
+          sifirinSonKonumu = indis;
+        }
+        birOncekiSifirMi = true;
+      } else {
+        birOncekiSifirMi = false;
+        sifirdanFarkliMi = true;
+      }
+      indis--;
+    }
+    return value.substring(0, sifirinSonKonumu);
+  } else
+    return value;
 }
