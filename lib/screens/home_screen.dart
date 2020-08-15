@@ -7,6 +7,7 @@ import 'package:flutter_calculator/utilites/colors.dart';
 import 'package:flutter_calculator/utilites/strings.dart';
 import 'package:flutter_calculator/utilites/tools.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -18,27 +19,43 @@ class _HomeScreenState extends State<HomeScreen> {
   String secondNumber = "";
   CalculateOperant calculateOperant;
   bool isDotUser = false;
+  int numberSize = 0;
 
   clicked(String entryNumber,
       {isCalcOperant = false, CalculateOperant clickOperant}) {
     setState(() {
       if (!isCalcOperant) {
-        firstNumber = "$firstNumber$entryNumber";
+        if (numberSize < 8) {
+          firstNumber = "$firstNumber$entryNumber";
+          numberSize++;
+        } else {
+          Fluttertoast.showToast(
+              msg: "Max number size",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.red,
+              textColor: Colors.white,
+              fontSize: 16.0);
+        }
       } else {
         if (clickOperant == CalculateOperant.DELETE_ALL) {
           firstNumber = "";
           secondNumber = "";
           isDotUser = false;
+          numberSize = 0;
         } else if (clickOperant == CalculateOperant.REMOVE_LAST) {
           if (firstNumber[firstNumber.length - 1] == TEXT_DOT) {
             firstNumber = firstNumber.substring(0, firstNumber.length - 1);
             isDotUser = false;
           } else if (firstNumber.isNotEmpty)
             firstNumber = firstNumber.substring(0, firstNumber.length - 1);
+          numberSize--;
         } else if (clickOperant == CalculateOperant.EQUALS) {
           firstNumber =
               calculateOperant.getCalculate(firstNumber, secondNumber);
           secondNumber = "";
+          numberSize = 0;
         } else if (clickOperant == CalculateOperant.SUM) {
           if (firstNumber.isEmpty) {
             firstNumber = "-";
@@ -67,6 +84,7 @@ class _HomeScreenState extends State<HomeScreen> {
     secondNumber = firstNumber;
     firstNumber = "";
     calculateOperant = clickOperant;
+    numberSize = 0;
   }
 
   @override
