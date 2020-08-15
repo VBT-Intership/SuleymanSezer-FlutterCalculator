@@ -6,6 +6,7 @@ extension GetCalculate on CalculateOperant {
   String getCalculate(String num1, String num2) {
     double nm1 = double.parse(num1);
     double nm2 = double.parse(num2);
+    bool isPercent = false;
     double result;
     switch (this) {
       case CalculateOperant.PLUS:
@@ -25,6 +26,7 @@ extension GetCalculate on CalculateOperant {
         break;
       case CalculateOperant.PERCENT:
         result = nm2 % nm1;
+        isPercent = true;
         break;
       case CalculateOperant.DELETE_ALL:
         break;
@@ -35,7 +37,11 @@ extension GetCalculate on CalculateOperant {
       case CalculateOperant.DOT:
         break;
     }
-    return resultSplit(result);
+
+    if (isPercent)
+      return result.toString();
+    else
+      return resultSplit(result);
   }
 }
 
